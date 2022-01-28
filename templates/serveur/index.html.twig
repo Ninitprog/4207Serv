@@ -1,17 +1,17 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Hello ServeurController!{% endblock %}
+{% block title %}Index{% endblock %}
 
 {% block body %}
 <style>
     .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
     .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
 </style>
-<link rel="stylesheet" type="text/css" href="https://bootswatch.com/5/materia/bootstrap.min.css">
+
 <div class="example-wrapper">
     <h1>formulaire qui sert a rien</h1>
 
-    <form>
+    <form action="/serveur/affiche" method="POST">
 		  <div class="mb-3">
 			<label for="identifiant" class="form-label">identifiant</label>
 			<input type="text" class="form-control" id="identifiant" aria-describedby="identifiant" name="identifiant">

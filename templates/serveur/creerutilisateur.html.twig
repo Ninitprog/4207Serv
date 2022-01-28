@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}ajout utilisateur{% endblock %}
+
+{% block body %}
+<style>
+    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
+    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
+</style>
+
+<div class="example-wrapper">
+    <h1>formulaire d'ajout d'u utilisateur</h1>
+
+    <form action="/serveur/ajoututilisateur" method="POST">
+		  <div class="mb-3">
+			<label for="nom" class="form-label">Nom de l'utilisateur</label>
+			<input type="text" class="form-control" id="nom"  name="nom">
+		  </div>
+		  <div class="mb-3">
+			<label for="MDP" class="form-label">Mot de passe</label>
+			<input type="text" class="form-control" id="MDP" name="MDP">
+		  </div>
+		  <button type="submit" class="btn btn-primary">Soumettre</button>
+
+</div>
+{% endblock %}
