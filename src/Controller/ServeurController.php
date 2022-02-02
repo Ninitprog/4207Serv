@@ -38,7 +38,7 @@ class ServeurController extends AbstractController
 }
 
 /**
-     * @Route("/serveur/creerutilisateur", name="serveur")
+     * @Route("/serveur/creerutilisateur", name="serveur/creerutilisateur")
      */
     public function creerutilisateur(): Response
     {
