@@ -67,8 +67,8 @@ class ServeurController extends AbstractController
         $nom = $request -> request -> get("nom");
         $Prenom = $request -> request -> get("Prenom");
         $MDP = $request -> request -> get("MDP");
-        $nom->setNom('$nom');
-        $manager->persist($nom);
+        $Nom->setNom('$Nom');
+        $manager->persist($Nom);
         $Prenom->setPrenom('$Prenom');
         $manager->persist($Prenom);
         $MDP->setCode('$MDP');
