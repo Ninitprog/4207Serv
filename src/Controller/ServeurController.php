@@ -59,7 +59,7 @@ class ServeurController extends AbstractController
 /**
      * @Route("/serveur/ajoututilisateur", name="/serveur/ajoututilisateur")
      */
-    public function affiche(Request $request, EntityManagerInterface $manager): Response
+    public function ajoututilisateur(Request $request, EntityManagerInterface $manager): Response
     {
         $nom = new Utilisateur();
         $Prenom = new Utilisateur();
