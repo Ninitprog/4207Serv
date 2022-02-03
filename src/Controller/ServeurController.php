@@ -6,6 +6,9 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
+use Doctrine\ORM\EntityManagerInterface;
+use App\Entity\Utilisateur;
+
 
 class ServeurController extends AbstractController
 {
@@ -22,18 +25,25 @@ class ServeurController extends AbstractController
     /**
      * @Route("/serveur/affiche", name="serveur/affiche")
      */
-    public function affiche(Request $request): Response
+    public function affiche(Request $request, EntityManagerInterface $manager): Response
     {
         $identifiant = $request -> request -> get("identifiant");
         $password = $request -> request -> get("password");
-        if (($identifiant=="root") && ($password=="toor")){
-            $reponse = "acces autorise";
-         } 
-         else{
-             $reponse = "erreur";
-         }
+        $utilisateur = $manager -> getRepository(utilisateur :: class) -> findOneBy([ 'Nom' => $identifiant]);
+        if ($utilisateur == NULL){
+            $reponse2 = "utilisateur inconnu";
+        }
+        else {
+            $code = $utilisateur -> getCode();
+            if ($code == $password){
+                $reponse2 = "acces autorise";
+            } 
+            else{
+                 $reponse2 = "erreur";
+            }
+        }
         return $this->render('serveur/affiche.html.twig', [
-            'Message' => $reponse,
+            'Message' => $reponse2,
         ]);
 }
 
@@ -46,5 +56,30 @@ class ServeurController extends AbstractController
             'controller_name' => 'ServeurController',
         ]);
 }
+/**
+     * @Route("/serveur/ajoututilisateur", name="/serveur/ajoututilisateur")
+     */
+    //public function affiche(Request $request): Response
+    //{
+    //    $nom = new Utilisateur();
+      //  $Prenom = new Utilisateur();
+       // $MDP = new Utilisateur ();
+    //    $nom = $request -> request -> get("nom");
+    //    $Prenom = $request -> request -> get("Prenom");
+    //    $MDP = $request -> request -> get("MDP");
+    //    $nom->setnom('$nom');
+    //    $em->persist($nom);
+    //    $Prenom->setnom('$Prenom');
+    //    $em->persist($Prenom);
+    //    $MDP->setnom('$MDP');
+    //    $em->persist($MDP);
+    //    $em->flush;
+
+      //  $text = 'ajout effectuer'
+
+      //  return $this->render('serveur/ajoututilisateur.html.twig', [
+        //    'text' => $text,
+        //]);
+//}
 
 }
