@@ -59,27 +59,27 @@ class ServeurController extends AbstractController
 /**
      * @Route("/serveur/ajoututilisateur", name="/serveur/ajoututilisateur")
      */
-    //public function affiche(Request $request): Response
-    //{
-    //    $nom = new Utilisateur();
-      //  $Prenom = new Utilisateur();
-       // $MDP = new Utilisateur ();
-    //    $nom = $request -> request -> get("nom");
-    //    $Prenom = $request -> request -> get("Prenom");
-    //    $MDP = $request -> request -> get("MDP");
-    //    $nom->setnom('$nom');
-    //    $em->persist($nom);
-    //    $Prenom->setnom('$Prenom');
-    //    $em->persist($Prenom);
-    //    $MDP->setnom('$MDP');
-    //    $em->persist($MDP);
-    //    $em->flush;
+    public function affiche(Request $request, EntityManagerInterface $manager): Response
+    {
+        $nom = new Utilisateur();
+        $Prenom = new Utilisateur();
+        $MDP = new Utilisateur ();
+        $nom = $request -> request -> get("nom");
+        $Prenom = $request -> request -> get("Prenom");
+        $MDP = $request -> request -> get("MDP");
+        $nom->setNom('$nom');
+        $manager->persist($nom);
+        $Prenom->setPrenom('$Prenom');
+        $manager->persist($Prenom);
+        $MDP->setCode('$MDP');
+        $manager->persist($MDP);
+        $manager->flush;
 
-      //  $text = 'ajout effectuer'
+        $text = 'ajout effectuer'
 
-      //  return $this->render('serveur/ajoututilisateur.html.twig', [
-        //    'text' => $text,
-        //]);
-//}
+       return $this->render('serveur/ajoututilisateur.html.twig', [
+            'text' => $text,
+        ]);
+}
 
 }
