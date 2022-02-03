@@ -75,7 +75,7 @@ class ServeurController extends AbstractController
         $manager->persist($MDP);
         $manager->flush;
 
-        $text = 'ajout effectuer'
+        $text = "ajout effectuer";
 
        return $this->render('serveur/ajoututilisateur.html.twig', [
             'text' => $text,
