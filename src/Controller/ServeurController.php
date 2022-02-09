@@ -35,7 +35,7 @@ class ServeurController extends AbstractController
         }
         else {
             $code = $utilisateur -> getCode();
-            if ($code == $password){
+            if (password_verify($password,$code)){
                 $reponse2 = "acces autorise";
             } 
             else{
@@ -62,12 +62,10 @@ class ServeurController extends AbstractController
     public function ajoututilisateur(Request $request, EntityManagerInterface $manager): Response
     {
         $newUti = new Utilisateur();
-        //$Nom = new Utilisateur();
-        //$Prenom = new Utilisateur();
-        //$MDP = new Utilisateur ();
         $nom = $request -> request -> get("nom");
         $Prenom = $request -> request -> get("Prenom");
         $MDP = $request -> request -> get("MDP");
+        $MDP = (password_hash($MDP, PASSWORD_DEFAULT));
         $newUti->setNom($nom);
         $manager->persist($newUti);
         $newUti->setPrenom($Prenom);
@@ -81,6 +79,15 @@ class ServeurController extends AbstractController
        return $this->render('serveur/ajoututilisateur.html.twig', [
             'text' => $text,
         ]);
+}
+
+/**
+     * @Route("/serveur/afficheUti", name="serveur/afficheUti")
+     */
+    public function afficheUti(EntityManagerInterface $manager): Response
+    {
+        $mesUtilisateurs=$manager->getRepository(Utilisateur::class)->findAll();
+        return $this->render('serveur/afficheUti.html.twig',['lst_utilisateurs' => $mesUtilisateurs]);
 }
 
 }
