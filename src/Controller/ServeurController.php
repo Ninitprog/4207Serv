@@ -61,19 +61,20 @@ class ServeurController extends AbstractController
      */
     public function ajoututilisateur(Request $request, EntityManagerInterface $manager): Response
     {
-        $nom = new Utilisateur();
-        $Prenom = new Utilisateur();
-        $MDP = new Utilisateur ();
+        $newUti = new Utilisateur();
+        //$Nom = new Utilisateur();
+        //$Prenom = new Utilisateur();
+        //$MDP = new Utilisateur ();
         $nom = $request -> request -> get("nom");
         $Prenom = $request -> request -> get("Prenom");
         $MDP = $request -> request -> get("MDP");
-        $Nom->setNom('$Nom');
-        $manager->persist($Nom);
-        $Prenom->setPrenom('$Prenom');
-        $manager->persist($Prenom);
-        $MDP->setCode('$MDP');
-        $manager->persist($MDP);
-        $manager->flush;
+        $newUti->setNom($nom);
+        $manager->persist($newUti);
+        $newUti->setPrenom($Prenom);
+        $manager->persist($newUti);
+        $newUti->setCode($MDP);
+        $manager->persist($newUti);
+        $manager->flush();
 
         $text = "ajout effectuer";
 
