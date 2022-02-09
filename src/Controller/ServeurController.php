@@ -8,6 +8,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Utilisateur;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 
 class ServeurController extends AbstractController
@@ -37,6 +38,7 @@ class ServeurController extends AbstractController
             $code = $utilisateur -> getCode();
             if (password_verify($password,$code)){
                 $reponse2 = "acces autorise";
+                return $this->redirectToRoute ('serveur/session');
             } 
             else{
                  $reponse2 = "erreur";
@@ -74,11 +76,7 @@ class ServeurController extends AbstractController
         $manager->persist($newUti);
         $manager->flush();
 
-        $text = "ajout effectuer";
-
-       return $this->render('serveur/ajoututilisateur.html.twig', [
-            'text' => $text,
-        ]);
+        return $this->redirectToRoute ('serveur/creerutilisateur');
 }
 
 /**
@@ -88,6 +86,15 @@ class ServeurController extends AbstractController
     {
         $mesUtilisateurs=$manager->getRepository(Utilisateur::class)->findAll();
         return $this->render('serveur/afficheUti.html.twig',['lst_utilisateurs' => $mesUtilisateurs]);
+}
+/**
+     * @Route("/serveur/session", name="serveur/session")
+     */
+    public function session(SessionInterface $session): Response
+    {
+        return $this->render('serveur/session.html.twig', [
+            'controller_name' => 'ServeurController',
+        ]);
 }
 
 }
