@@ -96,7 +96,7 @@ class ServeurController extends AbstractController
         $vs = $session -> get('nomVar');
         $val=44;
         $session -> set('nomVar',$val);
-        return $this->render ('serveur/session.html.twig');
+        return $this->render ('serveur/session.html.twig', ['name' => $vs]);
 }
 
 /**
