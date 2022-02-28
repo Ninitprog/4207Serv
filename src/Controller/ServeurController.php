@@ -97,4 +97,14 @@ class ServeurController extends AbstractController
         ]);
 }
 
+/**
+* @Route("/supprimerUtilisateur/{id}",name="supprimer_Utilisateur")
+*/
+public function supprimerUtilisateur(EntityManagerInterface $manager,Utilisateur $editutil): Response {
+    $manager->remove($editutil);
+    $manager->flush();
+    // Affiche de nouveau la liste des utilisateurs
+    return $this->redirectToRoute ('serveur/afficheUti');
+ }
+
 }
