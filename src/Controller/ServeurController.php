@@ -11,6 +11,7 @@ use App\Entity\Utilisateur;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
 
+
 class ServeurController extends AbstractController
 {
     /**
@@ -26,7 +27,7 @@ class ServeurController extends AbstractController
     /**
      * @Route("/serveur/affiche", name="serveur/affiche")
      */
-    public function affiche(Request $request, EntityManagerInterface $manager): Response
+    public function affiche(Request $request, EntityManagerInterface $manager, SessionInterface $session): Response
     {
         $identifiant = $request -> request -> get("identifiant");
         $password = $request -> request -> get("password");
@@ -37,7 +38,7 @@ class ServeurController extends AbstractController
         else {
             $code = $utilisateur -> getCode();
             if (password_verify($password,$code)){
-                $reponse2 = "acces autorise";
+                $session->set('nomVar', $utilisateur->getNom());
                 return $this->redirectToRoute ('serveur/session');
             } 
             else{
@@ -92,9 +93,10 @@ class ServeurController extends AbstractController
      */
     public function session(SessionInterface $session): Response
     {
-        return $this->render('serveur/session.html.twig', [
-            'controller_name' => 'ServeurController',
-        ]);
+        $vs = $session -> get('nomVar');
+        $val=44;
+        $session -> set('nomVar',$val);
+        return $this->render ('serveur/session.html.twig');
 }
 
 /**
@@ -106,5 +108,5 @@ public function supprimerUtilisateur(EntityManagerInterface $manager,Utilisateur
     // Affiche de nouveau la liste des utilisateurs
     return $this->redirectToRoute ('serveur/afficheUti');
  }
-
+ 
 }
