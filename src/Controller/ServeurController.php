@@ -38,7 +38,7 @@ class ServeurController extends AbstractController
         else {
             $code = $utilisateur -> getCode();
             if (password_verify($password,$code)){
-                $session->set('nomVar', $utilisateur->getNom());
+                $session->set('nomVar', $utilisateur->getId());
                 return $this->redirectToRoute ('serveur/session');
             } 
             else{
@@ -53,11 +53,28 @@ class ServeurController extends AbstractController
 /**
      * @Route("/serveur/creerutilisateur", name="serveur/creerutilisateur")
      */
-    public function creerutilisateur(): Response
+    public function creerutilisateur(SessionInterface $session, EntityManagerInterface $manager ): Response
     {
-        return $this->render('serveur/creerutilisateur.html.twig', [
-            'controller_name' => 'ServeurController',
-        ]);
+        $vs = $session -> get('nomVar');
+        if ($vs!=0){
+            $user=$manager->getRepository(Utilisateur::class)->findOneById($vs);
+            if ($user->getNom()=="admin"){
+                return $this->render('serveur/creerutilisateur.html.twig', [
+                    'controller_name' => 'ServeurController',
+                ]);
+            }
+            else{
+                $reponse2="accès interdit";
+                return $this->render('serveur/affiche.html.twig', [
+                    'Message' => $reponse2,
+                ]);
+            }
+        }
+        else{
+            return $this->render('serveur/index.html.twig', [
+                'controller_name' => 'ServeurController',
+            ]);
+        }
 }
 /**
      * @Route("/serveur/ajoututilisateur", name="/serveur/ajoututilisateur")
@@ -83,20 +100,36 @@ class ServeurController extends AbstractController
 /**
      * @Route("/serveur/afficheUti", name="serveur/afficheUti")
      */
-    public function afficheUti(EntityManagerInterface $manager): Response
+    public function afficheUti(EntityManagerInterface $manager, SessionInterface $session): Response
     {
-        $mesUtilisateurs=$manager->getRepository(Utilisateur::class)->findAll();
-        return $this->render('serveur/afficheUti.html.twig',['lst_utilisateurs' => $mesUtilisateurs]);
+        $vs = $session -> get('nomVar');
+        if ($vs!=0){
+            $user=$manager->getRepository(Utilisateur::class)->findOneById($vs);
+            if ($user->getNom()=="admin"){
+                $mesUtilisateurs=$manager->getRepository(Utilisateur::class)->findAll();
+                return $this->render('serveur/afficheUti.html.twig',['lst_utilisateurs' => $mesUtilisateurs]);
+            }
+            else{
+                $reponse2="accès interdit";
+                return $this->render('serveur/affiche.html.twig', [
+                    'Message' => $reponse2,
+                ]);
+            }
+        }
+        else {
+            return $this->render('serveur/index.html.twig', [
+                'controller_name' => 'ServeurController',
+            ]);
+        }
 }
 /**
      * @Route("/serveur/session", name="serveur/session")
      */
-    public function session(SessionInterface $session): Response
+    public function session(SessionInterface $session, EntityManagerInterface $manager): Response
     {
         $vs = $session -> get('nomVar');
-        $val=44;
-        $session -> set('nomVar',$val);
-        return $this->render ('serveur/session.html.twig', ['name' => $vs]);
+        $user=$manager->getRepository(Utilisateur::class)->findOneById($vs);
+        return $this->render('serveur/session.html.twig',['name' => $user->getNom()]);
 }
 
 /**
@@ -108,5 +141,48 @@ public function supprimerUtilisateur(EntityManagerInterface $manager,Utilisateur
     // Affiche de nouveau la liste des utilisateurs
     return $this->redirectToRoute ('serveur/afficheUti');
  }
+ /**
+     * @Route("/serveur/deco", name="serveur/deco")
+     */
+    public function deco(SessionInterface $session): Response
+    {
+        $session->clear();
+        return $this->render('serveur/index.html.twig', [
+            'controller_name' => 'ServeurController',
+        ]);
+        
+}
+
+/**
+     * @Route("/serveur/inserFichier", name="serveur/inserFichier")
+     */
+    public function insertFichier(SessionInterface $session): Response
+    {
+        $vs = $session -> get('nomVar');
+        if ($vs!=0){
+            return $this->render('serveur/insertFichier.html.twig', ['controller_name' => 'ServeurController']);
+        }
+        else {
+            return $this->render('serveur/index.html.twig', [
+                'controller_name' => 'ServeurController',
+            ]);
+        }
+}
+
+/**
+     * @Route("/serveur/listeFichier", name="serveur/listeFichier")
+     */
+    public function listeFichier(SessionInterface $session): Response
+    {
+        $vs = $session -> get('nomVar');
+        if ($vs!=0){
+            return $this->render('serveur/listeFichier.html.twig', ['controller_name' => 'ServeurController']);
+        }
+        else {
+            return $this->render('serveur/index.html.twig', [
+                'controller_name' => 'ServeurController',
+            ]);
+        }
+}
  
 }
