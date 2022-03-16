@@ -166,11 +166,11 @@ public function supprimerUtilisateur(EntityManagerInterface $manager,Utilisateur
         move_uploaded_file($fifi, "$uploadFiles/$name");
 
         $newDOC = new Document();
-        $newDOC = setChemin($name);
+        $newDOC -> setChemin($name);
         $date = new \DateTime("now");
-        $newDOC = setDate($date);
+        $newDOC -> setDate($date);
         $actif = TRUE;
-        $newDOC = setActif($actif);
+        $newDOC -> setActif($actif);
         $manager->persist($newDOC);
         $manager->flush();
 
