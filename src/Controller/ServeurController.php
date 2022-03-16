@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Utilisateur;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use App\Repository\DocumentRepository;
 
 
 
@@ -153,6 +154,21 @@ public function supprimerUtilisateur(EntityManagerInterface $manager,Utilisateur
         
 }
 
+/**
+     * @Route("/server/ajouteFichier", name="server/ajouteFichier")
+     */
+    public function ajouteFichier(Request $request,EntityManagerInterface $manager): Response
+    {
+        $uploadFiles = '/home/etudrt/serveChanrion/public';
+        $fifi= $request -> request -> get("fichier");
+        $fifi = $_FILES['fichier']['tmp_name'];
+        $name = basename($_FILES['fichier']['name']);
+        move_uploaded_file($fifi, "$uploadFiles/$name");
+
+
+        return $this->render('serveur/insertFichier.html.twig', ['controller_name' => 'ServeurController']);
+
+}
 /**
      * @Route("/serveur/inserFichier", name="serveur/inserFichier")
      */
