@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Utilisateur;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
-use App\Repository\DocumentRepository;
+use App\Entity\Document;
 
 
 
@@ -164,6 +164,17 @@ public function supprimerUtilisateur(EntityManagerInterface $manager,Utilisateur
         $fifi = $_FILES['fichier']['tmp_name'];
         $name = basename($_FILES['fichier']['name']);
         move_uploaded_file($fifi, "$uploadFiles/$name");
+
+        $newDOC = new Document();
+        $newDOC = setChemin($name);
+        $date = new \DateTime("now");
+        $newDOC = setDate($date);
+        $actif = TRUE;
+        $newDOC = setActif($actif);
+        $manager->persist($newDOC);
+        $manager->flush();
+
+
 
 
         return $this->render('serveur/insertFichier.html.twig', ['controller_name' => 'ServeurController']);
