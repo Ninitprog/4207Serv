@@ -10,6 +10,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use App\Entity\Utilisateur;
 use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use App\Entity\Document;
+use App\Entity\Acces;
 
 
 
@@ -157,13 +158,14 @@ public function supprimerUtilisateur(EntityManagerInterface $manager,Utilisateur
 /**
      * @Route("/server/ajouteFichier", name="server/ajouteFichier")
      */
-    public function ajouteFichier(Request $request,EntityManagerInterface $manager): Response
+    public function ajouteFichier(Request $request,EntityManagerInterface $manager,SessionInterface $session ): Response
     {
         $uploadFiles = '/home/etudrt/serveChanrion/public';
         $fifi= $request -> request -> get("fichier");
         $fifi = $_FILES['fichier']['tmp_name'];
         $name = basename($_FILES['fichier']['name']);
         move_uploaded_file($fifi, "$uploadFiles/$name");
+        $userId = $request -> request -> get("identifiant");
 
         $newDOC = new Document();
         $newDOC -> setChemin($name);
@@ -172,6 +174,15 @@ public function supprimerUtilisateur(EntityManagerInterface $manager,Utilisateur
         $actif = TRUE;
         $newDOC -> setActif($actif);
         $manager->persist($newDOC);
+        $manager->flush();
+
+        $newAcces = new Acces (); 
+        $uti=($utilisateur = $manager -> getRepository(Utilisateur::class)->findOneById($userId));
+        $newAcces->setUtilisateur($uti);
+        $droit=NULL;
+        $newAcces->setAutorisation($droit);
+        $newAcces->setDocument($name);
+        $manager->persiste($newAcces);
         $manager->flush();
 
 
